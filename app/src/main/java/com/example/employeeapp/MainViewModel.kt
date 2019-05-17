@@ -1,5 +1,6 @@
 package com.example.employeeapp
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,11 +15,8 @@ class MainViewModel : ViewModel() {
     private var currentSpecialty: Specialty? = null
     private var currentEmployee: Employee? = null
 
-    init{
-        currentFragment.postValue(FragmentName.SpecialityListFragment)
-    }
-
     fun loadFromApi() {
+        Log.d("logTag", "MainViewModel loadFromApi")
         val retrofit: Retrofit = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
@@ -29,35 +27,43 @@ class MainViewModel : ViewModel() {
         response.observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(IoScheduler())
             .subscribe({
-                employeeListLiveData.postValue(it)
+                Log.d("logTag", "MainViewModel response.size: ${it.response.size}")
+                employeeListLiveData.postValue(it.response)
+                if (currentFragment.value == null){
+                    currentFragment.postValue(FragmentName.SpecialityListFragment)
+                }
             },{
                 val error = it.message
+                Log.d("logTag", "MainViewModel response.error: $error")
             })
     }
 
     fun getSpecialtyList() : List<Specialty>{
+        Log.d("logTag", "MainViewModel getSpecialtyList")
         val employeeList = employeeListLiveData.value
         val specialtySet = LinkedHashSet<Specialty>()
         if (employeeList != null) {
             for (employee in employeeList) {
-                specialtySet.add(employee.specialty)
+                specialtySet.add(employee.specialty[0])
             }
         }
         return specialtySet.toList()
     }
 
     fun onSpecialtyItemClick(specialty: Specialty) {
+        Log.d("logTag", "MainViewModel onSpecialtyItemClick specialty: ${specialty.name}")
         currentSpecialty = specialty
         currentFragment.postValue(FragmentName.EmployeeListFragment)
     }
 
     fun getEmployeeList(): List<Employee> {
+        Log.d("logTag", "MainViewModel getEmployeeList")
         val resultList = ArrayList<Employee>()
         val employeeList = employeeListLiveData.value
         val specialty = currentSpecialty
         if (specialty != null && employeeList != null) {
             for (employee in employeeList) {
-                if (employee.specialty.specialty_id == specialty.specialty_id) {
+                if (employee.specialty[0].specialty_id == specialty.specialty_id) {
                     resultList.add(employee)
                 }
             }
@@ -66,11 +72,13 @@ class MainViewModel : ViewModel() {
     }
 
     fun onEmployeeItemClick(employee: Employee) {
+        Log.d("logTag", "MainViewModel onEmployeeItemClick employee: ${employee.getFirstName()}")
         currentEmployee = employee
         currentFragment.postValue(FragmentName.EmployeeFragment)
     }
 
     fun getCurrentEmployee() : Employee? {
+        Log.d("logTag", "MainViewModel getCurrentEmployee")
         return currentEmployee
     }
 }

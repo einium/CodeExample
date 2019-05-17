@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface RequestInterface {
     @GET("testTask.json")
-    fun getEmployeeList(): Observable<List<Employee>>
+    fun getEmployeeList(): Observable<EmployeeList>
 
 }

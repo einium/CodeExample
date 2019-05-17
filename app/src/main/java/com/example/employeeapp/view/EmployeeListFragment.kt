@@ -1,25 +1,23 @@
-package com.example.employeeapp
+package com.example.employeeapp.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.employeeapp.MainViewModel
+import com.example.employeeapp.R
 import com.example.employeeapp.adapters.EmployeeListAdapter
 
-class EmployeeListFragment : Fragment() {
-    private var viewModel: MainViewModel? = null
+class EmployeeListFragment(private val viewModel: MainViewModel) : Fragment() {
     private var recyclerView: RecyclerView? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //val parentActivity = activity
-        //if (parentActivity != null)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-    }
+    //override fun onCreate(savedInstanceState: Bundle?) {
+    //    super.onCreate(savedInstanceState)
+    //}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,9 +30,15 @@ class EmployeeListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val listLayoutManager = LinearLayoutManager(activity)
         recyclerView?.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = EmployeeListAdapter(viewModel!!)
+            layoutManager = listLayoutManager
+            adapter = EmployeeListAdapter(viewModel)
         }
+        val dividerItemDecoration = DividerItemDecoration(
+            recyclerView?.context,
+            listLayoutManager.orientation
+        )
+        recyclerView?.addItemDecoration(dividerItemDecoration)
     }
 }

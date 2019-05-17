@@ -5,12 +5,12 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".EmployeeFragment"
+        tools:context=".view.EmployeeFragment"
         android:id="@+id/employee_content">
 
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             tools:src="@tools:sample/avatars"
             android:id="@+id/empl_avatar"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,8 +29,8 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/avatar"/>
+            app:layout_constraintTop_toBottomOf="@+id/empl_avatar"
+            android:layout_marginTop="16dp"/>
     <TextView
             android:text="birthDay"
             android:layout_width="wrap_content"
@@ -39,16 +39,16 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/name"/>
+            app:layout_constraintTop_toBottomOf="@+id/empl_name"
+            android:layout_marginTop="16dp"/>
     <TextView
-            android:text="birthDay"
+            android:text="specialty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/empl_specialty"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/name"/>
+            app:layout_constraintTop_toBottomOf="@+id/empl_birthDay"
+            android:layout_marginTop="16dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
