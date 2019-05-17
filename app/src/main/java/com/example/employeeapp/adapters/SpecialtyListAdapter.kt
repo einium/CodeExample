@@ -8,7 +8,8 @@ import com.example.employeeapp.MainViewModel
 import com.example.employeeapp.R
 import com.example.employeeapp.Specialty
 
-class SpecialtyListAdapter(private val list: List<Specialty>, val viewModel: MainViewModel?) : RecyclerView.Adapter<SpecialtyListAdapter.SpecialtyViewHolder>() {
+class SpecialtyListAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<SpecialtyListAdapter.SpecialtyViewHolder>() {
+    private val list = viewModel.getSpecialtyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpecialtyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,7 +25,7 @@ class SpecialtyListAdapter(private val list: List<Specialty>, val viewModel: Mai
         holder.bind(specialty)
     }
 
-    class SpecialtyViewHolder(inflater: LayoutInflater, parent: ViewGroup, val viewModel: MainViewModel?):
+    class SpecialtyViewHolder(inflater: LayoutInflater, parent: ViewGroup, val viewModel: MainViewModel):
         RecyclerView.ViewHolder(inflater.inflate(R.layout.specialty_item, parent, false)) {
 
         private var nameTextView: TextView? = null
@@ -34,7 +35,7 @@ class SpecialtyListAdapter(private val list: List<Specialty>, val viewModel: Mai
 
         fun bind(specialty: Specialty) {
             nameTextView?.text = specialty.name
-            itemView.setOnClickListener { viewModel?.onSpecialtyItemClick(specialty)}
+            itemView.setOnClickListener { viewModel.onSpecialtyItemClick(specialty)}
         }
     }
 

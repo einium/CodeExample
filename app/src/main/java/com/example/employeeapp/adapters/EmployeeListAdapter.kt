@@ -8,7 +8,8 @@ import com.example.employeeapp.Employee
 import com.example.employeeapp.MainViewModel
 import com.example.employeeapp.R
 
-class EmployeeListAdapter(private val list: List<Employee>, private val viewModel: MainViewModel?) : RecyclerView.Adapter<EmployeeListAdapter.SpecialtyViewHolder>() {
+class EmployeeListAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<EmployeeListAdapter.SpecialtyViewHolder>() {
+    private val list = viewModel.getEmployeeList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpecialtyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,7 +25,7 @@ class EmployeeListAdapter(private val list: List<Employee>, private val viewMode
         holder.bind(employee)
     }
 
-    class SpecialtyViewHolder(inflater: LayoutInflater, parent: ViewGroup, private val viewModel: MainViewModel?):
+    class SpecialtyViewHolder(inflater: LayoutInflater, parent: ViewGroup, private val viewModel: MainViewModel):
         RecyclerView.ViewHolder(inflater.inflate(R.layout.employee_item, parent, false)) {
 
         private var firstNameTextView: TextView? = null
@@ -38,9 +39,9 @@ class EmployeeListAdapter(private val list: List<Employee>, private val viewMode
 
         fun bind(employee: Employee) {
             firstNameTextView?.text = employee.getFirstName()
-            lastNameTextView?.text = employee.getSecondName()
+            lastNameTextView?.text = employee.getLastName()
             ageTextView?.text = employee.getAge()
-            itemView.setOnClickListener { viewModel?.onEmployeeItemClick(employee)}
+            itemView.setOnClickListener { viewModel.onEmployeeItemClick(employee)}
         }
     }
 

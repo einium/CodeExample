@@ -9,13 +9,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.employeeapp.adapters.EmployeeListAdapter
-import com.example.employeeapp.adapters.SpecialtyListAdapter
-
 
 class EmployeeListFragment : Fragment() {
     private var viewModel: MainViewModel? = null
     private var recyclerView: RecyclerView? = null
-    private val list = ArrayList<Employee>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,22 +25,16 @@ class EmployeeListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_speciality_list, container, false)
-        updateList()
-        recyclerView = view.findViewById(R.id.speciality_list_rv)
+        val view = inflater.inflate(R.layout.fragment_employee_list, container, false)
+        recyclerView = view.findViewById(R.id.employee_list)
         return view
-    }
-
-    private fun updateList() {
-        list.clear()
-        list.addAll(viewModel!!.getEmployeeList())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView?.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = EmployeeListAdapter(list, viewModel)
+            adapter = EmployeeListAdapter(viewModel!!)
         }
     }
 }

@@ -51,7 +51,7 @@ class MainViewModel : ViewModel() {
         currentFragment.postValue(FragmentName.EmployeeListFragment)
     }
 
-    fun getEmployeeList(): Collection<Employee> {
+    fun getEmployeeList(): List<Employee> {
         val resultList = ArrayList<Employee>()
         val employeeList = employeeListLiveData.value
         val specialty = currentSpecialty
