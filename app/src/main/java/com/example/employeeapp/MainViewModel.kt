@@ -22,7 +22,7 @@ class MainViewModel : ViewModel() {
         val retrofit: Retrofit = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("http://gitlab.65apps.com/")
+            .baseUrl("http://gitlab.65apps.com/65gb/static/raw/master/")
             .build()
         val request = retrofit.create(RequestInterface::class.java)
         val response = request.getEmployeeList()
