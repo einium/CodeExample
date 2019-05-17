@@ -8,23 +8,18 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import com.example.employeeapp.adapters.SpecialtyListAdapter
 
-
 class SpecialityListFragment : Fragment() {
-    val viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-
-    @BindView(R.id.speciality_list_rv)
-    internal var recyclerView: RecyclerView? = null
-
-    private var unbinder: Unbinder? = null
+    private var viewModel: MainViewModel? = null
+    private var recyclerView: RecyclerView? = null
     private val list = ArrayList<Specialty>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val parentActivity = activity
+        if (parentActivity != null)
+            viewModel = ViewModelProviders.of(parentActivity).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -32,14 +27,14 @@ class SpecialityListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_speciality_list, container, false)
-        unbinder = ButterKnife.bind(this, view)
         updateList()
+        recyclerView = view.findViewById(R.id.speciality_list_rv)
         return view
     }
 
     private fun updateList() {
         list.clear()
-        list.addAll(viewModel.getSpecialtyList())
+        list.addAll(viewModel!!.getSpecialtyList())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,10 +43,5 @@ class SpecialityListFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = SpecialtyListAdapter(list)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unbinder?.unbind()
     }
 }
