@@ -16,8 +16,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel?.currentFragment?.observe(this, Observer { fragment -> setFragment(fragment)})
-        viewModel?.loadFromApi()
+        viewModel?.currentFragment?.observe(this, Observer {
+                fragment -> setFragment(fragment)})
+        //viewModel?.loadFromApi()
     }
 
     private fun setFragment(fragmentName: FragmentName?){

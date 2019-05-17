@@ -11,6 +11,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainViewModel : ViewModel() {
     val employeeListLiveData = MutableLiveData<List<Employee>>()
     val currentFragment = MutableLiveData<FragmentName>()
+    private var currentSpecialty: Specialty? = null
+    private var currentEmployee: Employee? = null
+
     init{
         currentFragment.postValue(FragmentName.SpecialityListFragment)
     }
@@ -41,6 +44,34 @@ class MainViewModel : ViewModel() {
             }
         }
         return specialtySet.toList()
+    }
+
+    fun onSpecialtyItemClick(specialty: Specialty) {
+        currentSpecialty = specialty
+        currentFragment.postValue(FragmentName.EmployeeListFragment)
+    }
+
+    fun getEmployeeList(): Collection<Employee> {
+        val resultList = ArrayList<Employee>()
+        val employeeList = employeeListLiveData.value
+        val specialty = currentSpecialty
+        if (specialty != null && employeeList != null) {
+            for (employee in employeeList) {
+                if (employee.specialty.specialty_id == specialty.specialty_id) {
+                    resultList.add(employee)
+                }
+            }
+        }
+        return resultList
+    }
+
+    fun onEmployeeItemClick(employee: Employee) {
+        currentEmployee = employee
+        currentFragment.postValue(FragmentName.EmployeeFragment)
+    }
+
+    fun getCurrentEmployee() : Employee? {
+        return currentEmployee
     }
 }
 enum class FragmentName{

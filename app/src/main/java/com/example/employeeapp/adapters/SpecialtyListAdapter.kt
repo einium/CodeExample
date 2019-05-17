@@ -4,14 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.employeeapp.MainViewModel
 import com.example.employeeapp.R
 import com.example.employeeapp.Specialty
 
-class SpecialtyListAdapter(private val list: List<Specialty>) : RecyclerView.Adapter<SpecialtyListAdapter.SpecialtyViewHolder>() {
+class SpecialtyListAdapter(private val list: List<Specialty>, val viewModel: MainViewModel?) : RecyclerView.Adapter<SpecialtyListAdapter.SpecialtyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpecialtyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return SpecialtyViewHolder(inflater, parent)
+        return SpecialtyViewHolder(inflater, parent, viewModel)
     }
 
     override fun getItemCount(): Int {
@@ -23,7 +24,7 @@ class SpecialtyListAdapter(private val list: List<Specialty>) : RecyclerView.Ada
         holder.bind(specialty)
     }
 
-    class SpecialtyViewHolder(inflater: LayoutInflater, parent: ViewGroup):
+    class SpecialtyViewHolder(inflater: LayoutInflater, parent: ViewGroup, val viewModel: MainViewModel?):
         RecyclerView.ViewHolder(inflater.inflate(R.layout.specialty_item, parent, false)) {
 
         private var nameTextView: TextView? = null
@@ -33,6 +34,8 @@ class SpecialtyListAdapter(private val list: List<Specialty>) : RecyclerView.Ada
 
         fun bind(specialty: Specialty) {
             nameTextView?.text = specialty.name
+            itemView.setOnClickListener { viewModel?.onSpecialtyItemClick(specialty)}
         }
     }
+
 }

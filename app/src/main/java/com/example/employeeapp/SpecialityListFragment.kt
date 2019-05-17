@@ -17,9 +17,9 @@ class SpecialityListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val parentActivity = activity
-        if (parentActivity != null)
-            viewModel = ViewModelProviders.of(parentActivity).get(MainViewModel::class.java)
+        //val parentActivity = activity
+        //if (parentActivity != null)
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -41,7 +41,7 @@ class SpecialityListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         recyclerView?.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = SpecialtyListAdapter(list)
+            adapter = SpecialtyListAdapter(list, viewModel)
         }
     }
 }
