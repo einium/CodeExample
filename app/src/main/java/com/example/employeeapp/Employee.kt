@@ -9,7 +9,7 @@ data class Employee(
     val f_name: String,
     val l_name: String,
     val birthday: String?,
-    val avatr_url: String,
+    val avatr_url: String?,
     val specialty: List<Specialty>
 ) {
     private var year: Int = 0
@@ -19,7 +19,7 @@ data class Employee(
     fun getAge(): String {
         parseStringDate(birthday)
         if (year == 0)
-            return "unknown"
+            return "—"
 
         val dateOfBirth = Calendar.getInstance()
         dateOfBirth.set(year, month, day)
@@ -39,7 +39,7 @@ data class Employee(
     private fun getDateInHumanFormat(): String {
         if (year != 0)
             return "$day.$month.$year"
-        return "««"
+        return "———"
     }
 
     private fun parseStringDate(textDate: String?) {
@@ -76,6 +76,24 @@ data class Employee(
             1 -> this.toUpperCase()
             else -> this[0].toUpperCase() + this.substring(1).toLowerCase()
         }
+    }
+
+    fun getSpecialtyId(): Int {
+        if (specialty.isNotEmpty()){
+            return specialty[0].specialty_id
+        }
+        return -1
+    }
+    fun getSpecialtyName(): String {
+        if (specialty.isNotEmpty()){
+            return specialty[0].name
+        }
+        return ""
+    }
+
+    fun getAvatarUrl(): String {
+        if (avatr_url != null) return avatr_url
+        return ""
     }
 }
 

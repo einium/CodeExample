@@ -3,39 +3,29 @@ package com.example.employeeapp
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.internal.schedulers.IoScheduler
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainViewModel : ViewModel() {
     val employeeListLiveData = MutableLiveData<List<Employee>>()
     val currentFragment = MutableLiveData<FragmentName>()
     private var currentSpecialty: Specialty? = null
     private var currentEmployee: Employee? = null
+    private var repository: Repository? = null
+    init {
+        Log.d("logTag", "MainViewModel init")
+    }
 
-    fun loadFromApi() {
-        Log.d("logTag", "MainViewModel loadFromApi")
-        val retrofit: Retrofit = Retrofit.Builder()
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("http://gitlab.65apps.com/65gb/static/raw/master/")
-            .build()
-        val request = retrofit.create(RequestInterface::class.java)
-        val response = request.getEmployeeList()
-        response.observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(IoScheduler())
-            .subscribe({
-                Log.d("logTag", "MainViewModel response.size: ${it.response.size}")
-                employeeListLiveData.postValue(it.response)
+    fun loadData(repo: Repository) {
+        if (repository == null) {
+            repository = repo
+        }
+        repository?.loadData(object : LoadCallback {
+            override fun onEmployeesLoaded(employeeList: List<Employee>) {
+                employeeListLiveData.postValue(employeeList)
                 if (currentFragment.value == null){
                     currentFragment.postValue(FragmentName.SpecialityListFragment)
                 }
-            },{
-                val error = it.message
-                Log.d("logTag", "MainViewModel response.error: $error")
-            })
+            }
+        })
     }
 
     fun getSpecialtyList() : List<Specialty>{

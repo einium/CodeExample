@@ -34,7 +34,7 @@ class EmployeeListAdapter(private val viewModel: MainViewModel) : RecyclerView.A
         init {
             firstNameTextView = itemView.findViewById(R.id.employee_first_name)
             lastNameTextView = itemView.findViewById(R.id.employee_last_name)
-            ageTextView = itemView.findViewById(R.id.employee_age)
+            ageTextView = itemView.findViewById(R.id.employee_age_value)
         }
 
         fun bind(employee: Employee) {
@@ -44,5 +44,4 @@ class EmployeeListAdapter(private val viewModel: MainViewModel) : RecyclerView.A
             itemView.setOnClickListener { viewModel.onEmployeeItemClick(employee)}
         }
     }
-
 }

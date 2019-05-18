@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">EmployeeApp</string>
-    <string name="name">EmployeeName</string>
-
+    <string name="name">Name:</string>
+    <string name="age">Age:</string>
+    <string name="birthDay">Birthday:</string>
+    <string name="specialty">Specialty:</string>
 </resources>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Сотрудники</string>
+    <string name="name">Имя:</string>
+    <string name="age">Возраст:</string>
+    <string name="birthDay">Дата рождения:</string>
+    <string name="specialty">Должность:</string>
+</resources>

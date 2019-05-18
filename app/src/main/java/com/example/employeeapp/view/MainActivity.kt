@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("logTag", "MainActivity onCreate")
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel?.loadFromApi()
+        viewModel?.loadData(Repository(this))
         viewModel?.currentFragment?.observe(this, Observer {
                 fragment -> setFragment(fragment)})
     }
@@ -30,13 +30,9 @@ class MainActivity : AppCompatActivity() {
         if (fragmentName == null) return
 
         val fragment = when (fragmentName) {
-            FragmentName.SpecialityListFragment -> SpecialityListFragment(
-                viewModel!!
-            )
-            FragmentName.EmployeeListFragment -> EmployeeListFragment(
-                viewModel!!
-            )
-            FragmentName.EmployeeFragment -> EmployeeFragment(viewModel!!)
+            FragmentName.SpecialityListFragment -> SpecialityListFragment()
+            FragmentName.EmployeeListFragment -> EmployeeListFragment()
+            FragmentName.EmployeeFragment -> EmployeeFragment()
         }
         val transaction = supportFragmentManager.beginTransaction()
         transaction.addToBackStack(fragmentName.name)

@@ -15,7 +15,10 @@
                 android:text="first "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="4sp"
+                android:paddingTop="12sp"
+                android:paddingLeft="12sp"
+                android:paddingStart="12sp"
+                android:paddingBottom="4sp"
                 android:textSize="18sp"/>
 
         <TextView
@@ -23,15 +26,32 @@
                 android:text="last name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="4sp"
+                android:paddingLeft="4sp"
+                android:paddingStart="4sp"
                 android:textSize="18sp"/>
     </LinearLayout>
-
-    <TextView
-            android:id="@+id/employee_age"
-            android:text="age"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="4sp"
-            android:textSize="16sp"/>
+    <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+                android:id="@+id/employee_age_title"
+                android:text="@string/age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="12sp"
+                android:paddingStart="12sp"
+                android:paddingBottom="4sp"
+                android:textSize="16sp"/>
+        <TextView
+                android:id="@+id/employee_age_value"
+                android:text="age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="12sp"
+                android:paddingStart="12sp"
+                android:paddingBottom="4sp"
+                android:textSize="16sp"/>
+    </LinearLayout>
 </LinearLayout>

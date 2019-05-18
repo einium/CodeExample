@@ -10,17 +10,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.employeeapp.adapters.SpecialtyListAdapter
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.example.employeeapp.MainViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.employeeapp.R
 
-class SpecialityListFragment(private val viewModel: MainViewModel) : Fragment() {
+class SpecialityListFragment: Fragment() {
     private var recyclerView: RecyclerView? = null
     private var listAdapter: SpecialtyListAdapter? = null
+    private lateinit var viewModel: MainViewModel
 
-    //override fun onCreate(savedInstanceState: Bundle?) {
-    //    super.onCreate(savedInstanceState)
-    //}
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = activity?.run {
+            ViewModelProviders.of(this).get(MainViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
