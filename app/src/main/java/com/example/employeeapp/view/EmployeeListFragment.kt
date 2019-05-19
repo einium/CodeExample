@@ -9,12 +9,19 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.Unbinder
+import com.example.employeeapp.Employee
 import com.example.employeeapp.MainViewModel
 import com.example.employeeapp.R
 import com.example.employeeapp.adapters.EmployeeListAdapter
+import com.example.employeeapp.adapters.OnEmployeeClickCallback
 
 class EmployeeListFragment: Fragment() {
-    private var recyclerView: RecyclerView? = null
+    @BindView(R.id.employee_list) lateinit var recyclerView: RecyclerView
+    private lateinit var unbinder: Unbinder
+    private lateinit var listAdapter: EmployeeListAdapter
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,21 +36,31 @@ class EmployeeListFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_employee_list, container, false)
-        recyclerView = view.findViewById(R.id.employee_list)
+        unbinder = ButterKnife.bind(activity!!, view)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        listAdapter = EmployeeListAdapter(viewModel.getEmployeeList(), object: OnEmployeeClickCallback {
+            override fun onClick(employee: Employee) {
+                viewModel.onEmployeeItemClick(employee)
+            }
+        })
         val listLayoutManager = LinearLayoutManager(activity)
-        recyclerView?.apply {
+        recyclerView.apply {
             layoutManager = listLayoutManager
-            adapter = EmployeeListAdapter(viewModel)
+            adapter = listAdapter
         }
         val dividerItemDecoration = DividerItemDecoration(
-            recyclerView?.context,
+            recyclerView.context,
             listLayoutManager.orientation
         )
-        recyclerView?.addItemDecoration(dividerItemDecoration)
+        recyclerView.addItemDecoration(dividerItemDecoration)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        unbinder.unbind()
     }
 }

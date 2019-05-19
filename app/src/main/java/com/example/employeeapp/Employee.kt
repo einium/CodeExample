@@ -62,9 +62,11 @@ data class Employee(
     fun getFirstName(): String {
         return f_name.beginWithUpperCase()
     }
-
     fun getLastName(): String {
         return l_name.beginWithUpperCase()
+    }
+    fun getFullName(): String {
+        return "${getFirstName()} ${getLastName()}"
     }
 
     private fun String.beginWithUpperCase(): String {

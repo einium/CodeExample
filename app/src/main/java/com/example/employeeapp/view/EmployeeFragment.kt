@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.Unbinder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -17,12 +20,13 @@ import com.example.employeeapp.MainViewModel
 import com.example.employeeapp.R
 
 class EmployeeFragment : Fragment() {
-    private var avatar: ImageView? = null
-    private var name: TextView? = null
-    private var birthDay: TextView? = null
-    private var age: TextView? = null
-    private var specialty: TextView? = null
+    @BindView(R.id.empl_avatar) lateinit var avatar: ImageView
+    @BindView(R.id.empl_name_value) lateinit var name: TextView
+    @BindView(R.id.empl_birthday_value) lateinit var birthDay: TextView
+    @BindView(R.id.empl_age_value) lateinit var age: TextView
+    @BindView(R.id.empl_specialty_value) lateinit var specialty: TextView
     private lateinit var viewModel: MainViewModel
+    private lateinit var unbinder: Unbinder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,16 +40,8 @@ class EmployeeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_employee, container, false)
-        bindViews(view)
+        unbinder = ButterKnife.bind(activity!!, view)
         return view
-    }
-
-    private fun bindViews(view: View?) {
-        avatar = view?.findViewById(R.id.empl_avatar)
-        name = view?.findViewById(R.id.empl_name_value)
-        birthDay = view?.findViewById(R.id.empl_birthday_value)
-        age = view?.findViewById(R.id.empl_age_value)
-        specialty = view?.findViewById(R.id.empl_specialty_value)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,11 +54,10 @@ class EmployeeFragment : Fragment() {
 
     private fun setEmployeeData(employee: Employee) {
         setAvatar(employee.getAvatarUrl())
-        val fullName = "${employee.getFirstName()} ${employee.getLastName()}"
-        name?.text = fullName
-        birthDay?.text = employee.getBirthDay()
-        age?.text = employee.getAge()
-        specialty?.text = employee.getSpecialtyName()
+        name.text = employee.getFullName()
+        birthDay.text = employee.getBirthDay()
+        age.text = employee.getAge()
+        specialty.text = employee.getSpecialtyName()
     }
 
     private fun setAvatar(url: String) {
@@ -78,5 +73,10 @@ class EmployeeFragment : Fragment() {
                 .load(R.drawable.employee)
                 .into(avatar)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        unbinder.unbind()
     }
 }

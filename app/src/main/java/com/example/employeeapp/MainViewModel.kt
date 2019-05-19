@@ -1,25 +1,50 @@
 package com.example.employeeapp
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
-    val employeeListLiveData = MutableLiveData<List<Employee>>()
-    val currentFragment = MutableLiveData<FragmentName>()
+    private val employeeListLiveData = MutableLiveData<List<Employee>>()
+    fun getEmployeeListLiveData() : LiveData<List<Employee>> {
+        return employeeListLiveData
+    }
+    private val currentFragmentLiveData = MutableLiveData<FragmentName>()
+    fun getCurrentFragmentLiveData() : LiveData<FragmentName> {
+        return currentFragmentLiveData
+    }
+    private val loadingLiveData = MutableLiveData<Boolean>()
+    fun getLoadingLiveData() : LiveData<Boolean> {
+        return loadingLiveData
+    }
+    private val errorLiveData = MutableLiveData<String>()
+    fun getErrorLiveData() : LiveData<String> {
+        return errorLiveData
+    }
+
     private var currentSpecialty: Specialty? = null
     private var currentEmployee: Employee? = null
-    private var repository: Repository? = null
+    private var repository: EmployeeRepository? = null
 
-    fun loadData(repo: Repository) {
+    fun loadData(repo: EmployeeRepository) {
         if (repository == null) {
             repository = repo
         }
         repository?.loadData(object : LoadCallback {
+            override fun startLoad() {
+                loadingLiveData.postValue(true)
+            }
+
             override fun onEmployeesLoaded(employeeList: List<Employee>) {
+                loadingLiveData.postValue(false)
                 employeeListLiveData.postValue(employeeList)
-                if (currentFragment.value == null){
-                    currentFragment.postValue(FragmentName.SpecialityListFragment)
+                if (currentFragmentLiveData.value == null){
+                    currentFragmentLiveData.postValue(FragmentName.SpecialityListFragment)
                 }
+            }
+
+            override fun onError(message: String) {
+                errorLiveData.postValue(message)
             }
         })
     }
@@ -37,7 +62,7 @@ class MainViewModel : ViewModel() {
 
     fun onSpecialtyItemClick(specialty: Specialty) {
         currentSpecialty = specialty
-        currentFragment.postValue(FragmentName.EmployeeListFragment)
+        currentFragmentLiveData.postValue(FragmentName.EmployeeListFragment)
     }
 
     fun getEmployeeList(): List<Employee> {
@@ -56,7 +81,7 @@ class MainViewModel : ViewModel() {
 
     fun onEmployeeItemClick(employee: Employee) {
         currentEmployee = employee
-        currentFragment.postValue(FragmentName.EmployeeFragment)
+        currentFragmentLiveData.postValue(FragmentName.EmployeeFragment)
     }
 
     fun getCurrentEmployee() : Employee? {
