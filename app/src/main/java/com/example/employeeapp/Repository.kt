@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-
+import retrofit2.http.GET
 
 class Repository(context: Context) {
     private val dbHelper = DataBaseHelper(context)
@@ -28,19 +28,13 @@ class Repository(context: Context) {
         })
     }
 
-    fun loadFromServer(callback: LoadCallback) {
-        Log.d("logTag", "Repository loadData")
-        val retrofit: Retrofit = Retrofit.Builder()
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("http://gitlab.65apps.com/65gb/static/raw/master/")
-            .build()
+    private fun loadFromServer(callback: LoadCallback) {
+        val retrofit = createRetrofit()
         val request = retrofit.create(RequestInterface::class.java)
         val response = request.getEmployeeList()
         response.observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(IoScheduler())
             .subscribe({
-                Log.d("logTag", "Repository loaded from server size: ${it.response.size}")
                 callback.onEmployeesLoaded(it.response)
                 saveToDB(it.response)
             },{
@@ -49,17 +43,24 @@ class Repository(context: Context) {
             })
     }
 
-    fun loadFromDB(callback: LoadCallback){
+    private fun createRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("http://gitlab.65apps.com/")
+            .build()
+    }
+
+    private fun loadFromDB(callback: LoadCallback){
         Observable.fromCallable {
             dbHelper.loadEmployees()
         }.observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.computation())
             .subscribe {
-                Log.d("logTag", "Repository loaded from db size: ${it.size}")
                 callback.onEmployeesLoaded(it)}
     }
 
-    fun saveToDB(list: List<Employee>){
+    private fun saveToDB(list: List<Employee>){
         Observable.fromCallable {
             dbHelper.saveEmployeeList(list)
         }.subscribeOn(Schedulers.computation())
@@ -69,4 +70,8 @@ class Repository(context: Context) {
 }
 interface LoadCallback{
     fun onEmployeesLoaded(employeeList: List<Employee>)
+}
+interface RequestInterface {
+    @GET("65gb/static/raw/master/testTask.json")
+    fun getEmployeeList(): Observable<EmployeeList>
 }

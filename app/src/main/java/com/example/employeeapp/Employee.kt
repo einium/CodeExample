@@ -1,6 +1,5 @@
 package com.example.employeeapp
 
-import android.util.Log
 import java.util.*
 
 data class EmployeeList(val response: List<Employee>)
@@ -43,7 +42,6 @@ data class Employee(
     }
 
     private fun parseStringDate(textDate: String?) {
-        Log.d("logTag", "Employee parseStringDate textDate: $textDate")
         if (textDate == null) return
 
         val splitText = textDate.split('-')
@@ -59,7 +57,6 @@ data class Employee(
                 day = Integer.valueOf(splitText[0])
             }
         }
-        Log.d("logTag", "Employee parseStringDate parse result: ${getDateInHumanFormat()}")
     }
 
     fun getFirstName(): String {

@@ -1,7 +1,6 @@
 package com.example.employeeapp.view
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +30,6 @@ class SpecialityListFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("logTag", "SpecialityListFragment onCreateView")
         val view = inflater.inflate(R.layout.fragment_speciality_list, container, false)
         recyclerView = view.findViewById(R.id.speciality_list_rv)
         return view
@@ -39,7 +37,6 @@ class SpecialityListFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("logTag", "SpecialityListFragment onViewCreated")
         listAdapter = SpecialtyListAdapter(viewModel)
         val listLayoutManager = LinearLayoutManager(activity)
         recyclerView?.apply {
@@ -53,7 +50,6 @@ class SpecialityListFragment: Fragment() {
         recyclerView?.addItemDecoration(dividerItemDecoration)
         viewModel.employeeListLiveData.observe(this, Observer {
             listAdapter?.notifyDataSetChanged()
-            Log.d("logTag", "SpecialityListFragment listAdapter?.notifyDataSetChanged()")
         })
     }
 }

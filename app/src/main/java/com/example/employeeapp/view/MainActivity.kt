@@ -2,7 +2,6 @@ package com.example.employeeapp.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.employeeapp.*
@@ -12,7 +11,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("logTag", "MainActivity onCreate")
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel?.loadData(Repository(this))
@@ -20,13 +18,7 @@ class MainActivity : AppCompatActivity() {
                 fragment -> setFragment(fragment)})
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("logTag", "MainActivity onStart")
-    }
-
     private fun setFragment(fragmentName: FragmentName?){
-        Log.d("logTag", "MainActivity setFragment ${fragmentName.toString()}")
         if (fragmentName == null) return
 
         val fragment = when (fragmentName) {
@@ -39,4 +31,5 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.fragment_container, fragment)
         transaction.commit()
     }
+
 }

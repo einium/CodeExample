@@ -19,7 +19,6 @@ class DataBaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     @Throws(SQLiteConstraintException::class)
     fun saveEmployeeList(employees: List<Employee>) {
-        Log.d("logTag", "DataBaseHelper saveEmployeeList size: ${employees.size}")
         clearDb()
         for (employee in employees) {
             insertEmployee(employee)
@@ -47,7 +46,6 @@ class DataBaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     @Throws(SQLiteConstraintException::class)
     fun loadEmployees(): List<Employee> {
-        Log.d("logTag", "DataBaseHelper loadEmployees")
         val db = writableDatabase
         val cursor = db.query(TABLE_NAME, null, null, null, null, null, null)
         val resultList = ArrayList<Employee>()
@@ -65,7 +63,6 @@ class DataBaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             } while (cursor.moveToNext())
         }
         cursor.close()
-        Log.d("logTag", "       resultList size: ${resultList.size}")
         return resultList
     }
 
