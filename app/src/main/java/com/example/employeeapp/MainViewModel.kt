@@ -3,6 +3,10 @@ package com.example.employeeapp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.employeeapp.data.EmployeeRepository
+import com.example.employeeapp.data.LoadCallback
+import com.example.employeeapp.data.model.Employee
+import com.example.employeeapp.data.model.Specialty
 
 class MainViewModel : ViewModel() {
     private val fullEmployeeList = ArrayList<Employee>()

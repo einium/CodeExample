@@ -1,6 +1,8 @@
-package com.example.employeeapp
+package com.example.employeeapp.data
 
 import android.content.Context
+import com.example.employeeapp.data.model.Employee
+import com.example.employeeapp.data.model.EmployeeList
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.internal.schedulers.IoScheduler

@@ -1,4 +1,4 @@
-package com.example.employeeapp
+package com.example.employeeapp.data.model
 
 import java.util.*
 

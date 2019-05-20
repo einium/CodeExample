@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.employeeapp.Employee
+import com.example.employeeapp.data.model.Employee
 import com.example.employeeapp.MainViewModel
 import com.example.employeeapp.R
 import com.example.employeeapp.adapters.EmployeeListAdapter

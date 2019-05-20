@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.employeeapp.Employee
+import com.example.employeeapp.data.model.Employee
 import com.example.employeeapp.R
 import com.example.employeeapp.databinding.EmployeeItemBinding
 

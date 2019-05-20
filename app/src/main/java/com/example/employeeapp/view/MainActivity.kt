@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.employeeapp.*
+import com.example.employeeapp.data.EmployeeRepository
 import com.example.employeeapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         setLoadingObserver()
         setErrorObserver()
     }
+
     private fun setFragmentChangeObserver(){
         viewModel.getCurrentFragmentLiveData()
             .observe(this, Observer {fragment -> setFragment(fragment)})
@@ -57,6 +59,7 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
+    //todo inject by di
     private val specialityListFragment = SpecialityListFragment()
     private val employeeListFragment = EmployeeListFragment()
     private val employeeFragment = EmployeeFragment()
@@ -74,5 +77,4 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.fragment_container, fragment)
         transaction.commit()
     }
-
 }

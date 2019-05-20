@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.employeeapp.R
-import com.example.employeeapp.Specialty
+import com.example.employeeapp.data.model.Specialty
 import com.example.employeeapp.databinding.SpecialtyItemBinding
 
 class SpecialtyListAdapter(private val callback: OnSpecialtyClickCallback) :

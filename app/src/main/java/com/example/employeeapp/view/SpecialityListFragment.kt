@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.example.employeeapp.MainViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.employeeapp.R
-import com.example.employeeapp.Specialty
+import com.example.employeeapp.data.model.Specialty
 import com.example.employeeapp.adapters.OnSpecialtyClickCallback
 import com.example.employeeapp.databinding.FragmentSpecialityListBinding
 

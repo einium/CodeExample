@@ -1,14 +1,18 @@
-package com.example.employeeapp
+package com.example.employeeapp.data
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
+import com.example.employeeapp.data.model.Employee
+import com.example.employeeapp.data.model.Specialty
 import java.util.ArrayList
 
-class DataBaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class DataBaseHelper(context: Context) : SQLiteOpenHelper(context,
+    DATABASE_NAME, null,
+    DATABASE_VERSION
+) {
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(SQL_CREATE_ENTRIES)
@@ -58,7 +62,14 @@ class DataBaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 val specialtyId = cursor.getInt(cursor.getColumnIndex(COLUMN_SPECIALTY_ID))
                 val specialtyName = cursor.getString(cursor.getColumnIndex(COLUMN_SPECIALTY_NAME))
                 val specialty = Specialty(specialtyId, specialtyName)
-                val employee = Employee(fName, lName, birthDay, avatarUrl, arrayListOf(specialty))
+                val employee =
+                    Employee(
+                        fName,
+                        lName,
+                        birthDay,
+                        avatarUrl,
+                        arrayListOf(specialty)
+                    )
                 resultList.add(employee)
             } while (cursor.moveToNext())
         }

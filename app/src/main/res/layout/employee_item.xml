@@ -3,7 +3,7 @@
     <data>
         <variable
                 name="employee"
-                type="com.example.employeeapp.Employee"/>
+                type="com.example.employeeapp.data.model.Employee"/>
     </data>
 
     <LinearLayout

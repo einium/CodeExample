@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.example.employeeapp.Employee
+import com.example.employeeapp.data.model.Employee
 import com.example.employeeapp.MainViewModel
 import com.example.employeeapp.R
 import com.example.employeeapp.databinding.FragmentEmployeeBinding
