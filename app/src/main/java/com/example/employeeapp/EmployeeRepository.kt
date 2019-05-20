@@ -19,38 +19,13 @@ class EmployeeRepository(context: Context) : Repository {
         .build()
 
     override fun loadData(callback: LoadCallback) {
-        loadFromDB(object : LoadCallback {
-            override fun startLoad() {
-
-            }
-
-            override fun onEmployeesLoaded(employeeList: List<Employee>) {
-                callback.onEmployeesLoaded(employeeList)
-            }
-
-            override fun onError(message: String) {
-                callback.onError(message)
-            }
-        })
-
-        loadFromServer(object : LoadCallback {
-            override fun startLoad() {
-
-            }
-
-            override fun onEmployeesLoaded(employeeList: List<Employee>) {
-                callback.onEmployeesLoaded(employeeList)
-            }
-
-            override fun onError(message: String) {
-                callback.onError(message)
-            }
-        })
+        loadFromDB(callback)
+        loadFromServer(callback)
     }
 
     private fun loadFromServer(callback: LoadCallback) {
         callback.startLoad()
-        val request = retrofit.create(RequestInterface::class.java)
+        val request = retrofit.create(EmployeeService::class.java)
         val response = request.getEmployeeList()
         response.observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(IoScheduler())
@@ -94,7 +69,7 @@ interface LoadCallback {
     fun onError(message: String)
 }
 
-interface RequestInterface {
+interface EmployeeService {
     @GET("65gb/static/raw/master/testTask.json")
     fun getEmployeeList(): Observable<EmployeeList>
 }

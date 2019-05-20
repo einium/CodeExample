@@ -13,20 +13,21 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
 import com.example.employeeapp.MainViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
+//import butterknife.BindView
+//import butterknife.ButterKnife
+//import butterknife.Unbinder
 import com.example.employeeapp.R
 import com.example.employeeapp.Specialty
 import com.example.employeeapp.adapters.OnSpecialtyClickCallback
 
 
 class SpecialityListFragment : Fragment() {
-    @BindView(R.id.speciality_list_rv)
-    lateinit var recyclerView: RecyclerView
-    private lateinit var unbinder: Unbinder
+    //@BindView(R.id.speciality_list_rv)
+    var recyclerView: RecyclerView? = null
+
+    //private lateinit var unbinder: Unbinder
     private lateinit var listAdapter: SpecialtyListAdapter
-    private lateinit var viewModel: MainViewModel
+    private var viewModel: MainViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,43 +41,44 @@ class SpecialityListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_speciality_list, container, false)
-        unbinder = ButterKnife.bind(activity!!, view)
+        //unbinder = ButterKnife.bind(activity!!, view)
+        recyclerView = view.findViewById(R.id.speciality_list_rv)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listAdapter = SpecialtyListAdapter(viewModel.getSpecialtyList(), object : OnSpecialtyClickCallback {
+        listAdapter = SpecialtyListAdapter(viewModel?.getSpecialtyList()!!, object : OnSpecialtyClickCallback {
             override fun onClick(specialty: Specialty) {
-                viewModel.onSpecialtyItemClick(specialty)
+                viewModel?.onSpecialtyItemClick(specialty)
             }
         })
 
         val listLayoutManager = LinearLayoutManager(activity)
-        recyclerView.apply {
+        recyclerView?.apply {
             layoutManager = listLayoutManager
             adapter = listAdapter
         }
         val dividerItemDecoration = DividerItemDecoration(
-            recyclerView.context,
+            recyclerView?.context,
             listLayoutManager.orientation
         )
-        recyclerView.addItemDecoration(dividerItemDecoration)
-        viewModel.getEmployeeListLiveData()
+        recyclerView?.addItemDecoration(dividerItemDecoration)
+        viewModel?.getEmployeeListLiveData()!!
             .observe(this, Observer {
                 val oldList = listAdapter.specialtyList
-                val newList = viewModel.getSpecialtyList()
-                val diffUtilCallback = DiffUtilCallback(oldList, newList)
+                val newList = viewModel?.getSpecialtyList()
+                val diffUtilCallback = DiffUtilCallback(oldList, newList!!)
                 val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
                 listAdapter.specialtyList = newList
                 diffResult.dispatchUpdatesTo(listAdapter)
             })
     }
 
-    override fun onDestroyView() {
+    /*override fun onDestroyView() {
         super.onDestroyView()
         unbinder.unbind()
-    }
+    }*/
 }
 
 class DiffUtilCallback(private val oldList: List<Specialty>, private val newList: List<Specialty>) :

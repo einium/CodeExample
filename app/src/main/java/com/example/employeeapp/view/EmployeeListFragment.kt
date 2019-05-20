@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
+//import butterknife.BindView
+//import butterknife.ButterKnife
+//import butterknife.Unbinder
 import com.example.employeeapp.Employee
 import com.example.employeeapp.MainViewModel
 import com.example.employeeapp.R
@@ -19,8 +19,9 @@ import com.example.employeeapp.adapters.EmployeeListAdapter
 import com.example.employeeapp.adapters.OnEmployeeClickCallback
 
 class EmployeeListFragment: Fragment() {
-    @BindView(R.id.employee_list) lateinit var recyclerView: RecyclerView
-    private lateinit var unbinder: Unbinder
+    //@BindView(R.id.employee_list)
+    lateinit var recyclerView: RecyclerView
+    //private lateinit var unbinder: Unbinder
     private lateinit var listAdapter: EmployeeListAdapter
     private lateinit var viewModel: MainViewModel
 
@@ -36,7 +37,8 @@ class EmployeeListFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_employee_list, container, false)
-        unbinder = ButterKnife.bind(activity!!, view)
+        //unbinder = ButterKnife.bind(activity!!, view)
+        recyclerView = view.findViewById(R.id.employee_list)
         return view
     }
 
@@ -58,9 +60,9 @@ class EmployeeListFragment: Fragment() {
         )
         recyclerView.addItemDecoration(dividerItemDecoration)
     }
-
+    /*
     override fun onDestroyView() {
         super.onDestroyView()
         unbinder.unbind()
-    }
+    }*/
 }

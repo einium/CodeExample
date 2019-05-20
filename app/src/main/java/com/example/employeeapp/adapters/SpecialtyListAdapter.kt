@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import com.example.employeeapp.MainViewModel
+//import butterknife.BindView
 import com.example.employeeapp.R
 import com.example.employeeapp.Specialty
 
@@ -29,7 +28,11 @@ class SpecialtyListAdapter(var specialtyList: List<Specialty>, private val callb
     class SpecialtyViewHolder(inflater: LayoutInflater, parent: ViewGroup, private val callback: OnSpecialtyClickCallback):
         RecyclerView.ViewHolder(inflater.inflate(R.layout.specialty_item, parent, false)) {
 
-        @BindView(R.id.specialty_name) lateinit var specialty: TextView
+        //@BindView(R.id.specialty_name)
+        lateinit var specialty: TextView
+        init {
+            specialty = itemView.findViewById(R.id.specialty_name)
+        }
 
         fun bind(specialty: Specialty) {
             this.specialty.text = specialty.name
