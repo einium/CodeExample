@@ -6,24 +6,22 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-//import butterknife.BindView
-//import butterknife.ButterKnife
 import com.example.employeeapp.*
+import com.example.employeeapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    //@BindView(R.id.progress_bar)
-    var progressBar: ProgressBar? = null
+    lateinit var progressBar: ProgressBar
 
     private lateinit var viewModel : MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        //ButterKnife.bind(this)
+        val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        progressBar = findViewById(R.id.progress_bar)
+        progressBar = binding.progressBar
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.loadData(EmployeeRepository(this))
@@ -42,12 +40,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.getLoadingLiveData()
             .observe(this, Observer {isLoading ->
                 if (isLoading) {
-                    progressBar?.visibility = View.VISIBLE
+                    progressBar.visibility = View.VISIBLE
                     window.setFlags(
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 } else {
-                    progressBar?.visibility = View.GONE
+                    progressBar.visibility = View.GONE
                     window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 }
             })

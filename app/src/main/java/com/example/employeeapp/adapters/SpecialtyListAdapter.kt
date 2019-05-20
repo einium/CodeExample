@@ -2,18 +2,20 @@ package com.example.employeeapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-//import butterknife.BindView
 import com.example.employeeapp.R
 import com.example.employeeapp.Specialty
+import com.example.employeeapp.databinding.SpecialtyItemBinding
 
 class SpecialtyListAdapter(var specialtyList: List<Specialty>, private val callback: OnSpecialtyClickCallback) :
     RecyclerView.Adapter<SpecialtyListAdapter.SpecialtyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpecialtyViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return SpecialtyViewHolder(inflater, parent, callback)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding: SpecialtyItemBinding =
+            DataBindingUtil.inflate(layoutInflater, R.layout.specialty_item, parent, false)
+        return SpecialtyViewHolder(binding, callback)
     }
 
     override fun getItemCount(): Int {
@@ -25,18 +27,12 @@ class SpecialtyListAdapter(var specialtyList: List<Specialty>, private val callb
         holder.bind(specialty)
     }
 
-    class SpecialtyViewHolder(inflater: LayoutInflater, parent: ViewGroup, private val callback: OnSpecialtyClickCallback):
-        RecyclerView.ViewHolder(inflater.inflate(R.layout.specialty_item, parent, false)) {
-
-        //@BindView(R.id.specialty_name)
-        lateinit var specialty: TextView
-        init {
-            specialty = itemView.findViewById(R.id.specialty_name)
-        }
+    class SpecialtyViewHolder(private val binding: SpecialtyItemBinding, private val callback: OnSpecialtyClickCallback):
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(specialty: Specialty) {
-            this.specialty.text = specialty.name
-            itemView.setOnClickListener {
+            binding.specialty = specialty
+            binding.specialtyItemContent.setOnClickListener {
                 callback.onClick(specialty)
             }
         }

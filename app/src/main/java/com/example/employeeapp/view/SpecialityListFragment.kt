@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.employeeapp.adapters.SpecialtyListAdapter
@@ -13,19 +14,13 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
 import com.example.employeeapp.MainViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
-//import butterknife.BindView
-//import butterknife.ButterKnife
-//import butterknife.Unbinder
 import com.example.employeeapp.R
 import com.example.employeeapp.Specialty
 import com.example.employeeapp.adapters.OnSpecialtyClickCallback
-
+import com.example.employeeapp.databinding.FragmentSpecialityListBinding
 
 class SpecialityListFragment : Fragment() {
-    //@BindView(R.id.speciality_list_rv)
-    var recyclerView: RecyclerView? = null
-
-    //private lateinit var unbinder: Unbinder
+    private lateinit var recyclerView: RecyclerView
     private lateinit var listAdapter: SpecialtyListAdapter
     private var viewModel: MainViewModel? = null
 
@@ -36,14 +31,11 @@ class SpecialityListFragment : Fragment() {
         } ?: throw Exception("Invalid Activity")
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_speciality_list, container, false)
-        //unbinder = ButterKnife.bind(activity!!, view)
-        recyclerView = view.findViewById(R.id.speciality_list_rv)
-        return view
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
+        val binding: FragmentSpecialityListBinding =
+            DataBindingUtil.inflate(inflater,R.layout.fragment_speciality_list, container,false)
+        recyclerView = binding.specialityListRv
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,15 +47,15 @@ class SpecialityListFragment : Fragment() {
         })
 
         val listLayoutManager = LinearLayoutManager(activity)
-        recyclerView?.apply {
+        recyclerView.apply {
             layoutManager = listLayoutManager
             adapter = listAdapter
         }
         val dividerItemDecoration = DividerItemDecoration(
-            recyclerView?.context,
+            recyclerView.context,
             listLayoutManager.orientation
         )
-        recyclerView?.addItemDecoration(dividerItemDecoration)
+        recyclerView.addItemDecoration(dividerItemDecoration)
         viewModel?.getEmployeeListLiveData()!!
             .observe(this, Observer {
                 val oldList = listAdapter.specialtyList
@@ -74,11 +66,6 @@ class SpecialityListFragment : Fragment() {
                 diffResult.dispatchUpdatesTo(listAdapter)
             })
     }
-
-    /*override fun onDestroyView() {
-        super.onDestroyView()
-        unbinder.unbind()
-    }*/
 }
 
 class DiffUtilCallback(private val oldList: List<Specialty>, private val newList: List<Specialty>) :

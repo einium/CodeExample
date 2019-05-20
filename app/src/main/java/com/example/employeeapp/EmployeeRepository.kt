@@ -19,7 +19,7 @@ class EmployeeRepository(context: Context) : Repository {
         .build()
 
     override fun loadData(callback: LoadCallback) {
-        loadFromDB(callback)
+        //loadFromDB(callback)
         loadFromServer(callback)
     }
 

@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+                name="specialty"
+                type="com.example.employeeapp.Specialty"/>
+    </data>
 
-    <TextView
-            android:id="@+id/specialty_name"
-            android:text="specialty name"
+    <LinearLayout
+            android:id="@+id/specialty_item_content"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12sp"
-            android:textSize="16sp"/>
-</LinearLayout>
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/specialty_name"
+                android:text="@{specialty.name}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12sp"
+                android:textSize="16sp"/>
+    </LinearLayout>
+</layout>
