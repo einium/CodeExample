@@ -8,8 +8,9 @@ import com.example.employeeapp.R
 import com.example.employeeapp.Specialty
 import com.example.employeeapp.databinding.SpecialtyItemBinding
 
-class SpecialtyListAdapter(var specialtyList: List<Specialty>, private val callback: OnSpecialtyClickCallback) :
+class SpecialtyListAdapter(private val callback: OnSpecialtyClickCallback) :
     RecyclerView.Adapter<SpecialtyListAdapter.SpecialtyViewHolder>() {
+    var specialtyList: List<Specialty>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpecialtyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -19,12 +20,16 @@ class SpecialtyListAdapter(var specialtyList: List<Specialty>, private val callb
     }
 
     override fun getItemCount(): Int {
-        return specialtyList.size
+        if (specialtyList != null)
+            return specialtyList!!.size
+        return 0
     }
 
     override fun onBindViewHolder(holder: SpecialtyViewHolder, position: Int) {
-        val specialty: Specialty = specialtyList[position]
-        holder.bind(specialty)
+        if (specialtyList != null) {
+            val specialty: Specialty = specialtyList!![position]
+            holder.bind(specialty)
+        }
     }
 
     class SpecialtyViewHolder(private val binding: SpecialtyItemBinding, private val callback: OnSpecialtyClickCallback):

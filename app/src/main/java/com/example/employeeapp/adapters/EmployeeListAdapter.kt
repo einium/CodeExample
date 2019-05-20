@@ -8,8 +8,9 @@ import com.example.employeeapp.Employee
 import com.example.employeeapp.R
 import com.example.employeeapp.databinding.EmployeeItemBinding
 
-class EmployeeListAdapter(private val employeeList: List<Employee>, private val clickCallback: OnEmployeeClickCallback) :
+class EmployeeListAdapter(private val clickCallback: OnEmployeeClickCallback) :
     RecyclerView.Adapter<EmployeeListAdapter.SpecialtyViewHolder>() {
+    var employeeList: List<Employee>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpecialtyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -19,12 +20,15 @@ class EmployeeListAdapter(private val employeeList: List<Employee>, private val 
     }
 
     override fun getItemCount(): Int {
-        return employeeList.size
+        if (employeeList == null) return 0
+        return employeeList!!.size
     }
 
     override fun onBindViewHolder(holder: SpecialtyViewHolder, position: Int) {
-        val employee: Employee = employeeList[position]
-        holder.bind(employee)
+        if (employeeList != null) {
+            val employee: Employee = employeeList!![position]
+            holder.bind(employee)
+        }
     }
 
     class SpecialtyViewHolder(private val binding: EmployeeItemBinding,

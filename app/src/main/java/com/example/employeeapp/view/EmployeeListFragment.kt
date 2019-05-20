@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,7 +41,7 @@ class EmployeeListFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listAdapter = EmployeeListAdapter(viewModel.getEmployeeList(), object: OnEmployeeClickCallback {
+        listAdapter = EmployeeListAdapter(object: OnEmployeeClickCallback {
             override fun onClick(employee: Employee) {
                 viewModel.onEmployeeItemClick(employee)
             }
@@ -54,5 +56,49 @@ class EmployeeListFragment: Fragment() {
             listLayoutManager.orientation
         )
         recyclerView.addItemDecoration(dividerItemDecoration)
+
+        val liveData = viewModel.getEmployeeBySpecialtyListLiveData()
+        listAdapter.employeeList = liveData.value
+        liveData.observe(this, Observer {
+            val oldList = listAdapter.employeeList
+            val newList = it
+            val diffUtilCallback = EmployeeDiffUtilCallback(oldList, newList)
+            val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
+            listAdapter.employeeList = newList
+            diffResult.dispatchUpdatesTo(listAdapter)
+        })
+    }
+}
+class EmployeeDiffUtilCallback(private val oldList: List<Employee>?, private val newList: List<Employee>?) :
+    DiffUtil.Callback() {
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        if (oldList == null || newList == null) return false
+
+        val oldEmployee = oldList[oldItemPosition]
+        val newEmployee = newList[newItemPosition]
+        return oldEmployee == newEmployee
+    }
+
+    override fun getOldListSize(): Int {
+        if (oldList == null) return 0
+        return oldList.size
+    }
+
+    override fun getNewListSize(): Int {
+        if (newList == null) return 0
+        return newList.size
+    }
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        if (oldList == null || newList == null) return false
+
+        val oldEmployee = oldList[oldItemPosition]
+        val newEmployee = newList[newItemPosition]
+        val firstNames = oldEmployee.f_name == newEmployee.f_name
+        val lastNames = oldEmployee.l_name == newEmployee.l_name
+        val birthDays = oldEmployee.birthday == newEmployee.birthday
+        val specs = oldEmployee.getSpecialtyId() == newEmployee.getSpecialtyId()
+        return firstNames && lastNames && birthDays && specs
     }
 }

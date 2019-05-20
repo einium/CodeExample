@@ -40,7 +40,7 @@ class SpecialityListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listAdapter = SpecialtyListAdapter(viewModel?.getSpecialtyList()!!, object : OnSpecialtyClickCallback {
+        listAdapter = SpecialtyListAdapter(object : OnSpecialtyClickCallback {
             override fun onClick(specialty: Specialty) {
                 viewModel?.onSpecialtyItemClick(specialty)
             }
@@ -56,11 +56,13 @@ class SpecialityListFragment : Fragment() {
             listLayoutManager.orientation
         )
         recyclerView.addItemDecoration(dividerItemDecoration)
-        viewModel?.getEmployeeListLiveData()!!
-            .observe(this, Observer {
+
+        val liveData = viewModel?.getSpecialtyListLiveData()
+        listAdapter.specialtyList = liveData?.value
+        liveData?.observe(this, Observer {
                 val oldList = listAdapter.specialtyList
-                val newList = viewModel?.getSpecialtyList()
-                val diffUtilCallback = DiffUtilCallback(oldList, newList!!)
+                val newList = it
+                val diffUtilCallback = SpecialtyDiffUtilCallback(oldList, newList)
                 val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
                 listAdapter.specialtyList = newList
                 diffResult.dispatchUpdatesTo(listAdapter)
@@ -68,24 +70,30 @@ class SpecialityListFragment : Fragment() {
     }
 }
 
-class DiffUtilCallback(private val oldList: List<Specialty>, private val newList: List<Specialty>) :
+class SpecialtyDiffUtilCallback(private val oldList: List<Specialty>?, private val newList: List<Specialty>?) :
     DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        if (oldList == null || newList == null) return false
+
         val oldSpecialty = oldList[oldItemPosition]
         val newSpecialty = newList[newItemPosition]
         return oldSpecialty.specialty_id == newSpecialty.specialty_id
     }
 
     override fun getOldListSize(): Int {
+        if (oldList == null) return 0
         return oldList.size
     }
 
     override fun getNewListSize(): Int {
+        if (newList == null) return 0
         return newList.size
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        if (oldList == null || newList == null) return false
+
         val oldSpecialty = oldList[oldItemPosition]
         val newSpecialty = newList[newItemPosition]
         return oldSpecialty.name == newSpecialty.name
