@@ -1,24 +1,26 @@
 package com.example.employeeapp.data
 
-import android.content.Context
+import com.example.employeeapp.App
 import com.example.employeeapp.data.model.Employee
 import com.example.employeeapp.data.model.EmployeeList
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.internal.schedulers.IoScheduler
 import io.reactivex.schedulers.Schedulers
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.http.GET
+import javax.inject.Inject
 
-class EmployeeRepository(context: Context) : Repository {
-    private val dbHelper = DataBaseHelper(context)
-    private val retrofit = Retrofit.Builder()
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl("http://gitlab.65apps.com/")
-        .build()
+class EmployeeRepository @Inject constructor() : Repository {
+    init {
+        App.getAppComponent().inject(this)
+    }
+
+    @Inject
+    lateinit var dbHelper: DataBaseHelper
+
+    @Inject
+    lateinit var retrofit: Retrofit
 
     override fun loadData(callback: LoadCallback) {
         //loadFromDB(callback)

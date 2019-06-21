@@ -10,8 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.employeeapp.*
-import com.example.employeeapp.data.EmployeeRepository
 import com.example.employeeapp.databinding.ActivityMainBinding
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,11 +21,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        App.getViewComponent().inject(this)
 
         progressBar = binding.progressBar
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.loadData(EmployeeRepository(this))
+        viewModel.loadData()
 
         setFragmentChangeObserver()
         setLoadingObserver()
@@ -59,10 +60,12 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    //todo inject by di
-    private val specialityListFragment = SpecialityListFragment()
-    private val employeeListFragment = EmployeeListFragment()
-    private val employeeFragment = EmployeeFragment()
+    @Inject
+    lateinit var specialityListFragment : SpecialityListFragment
+    @Inject
+    lateinit var employeeListFragment : EmployeeListFragment
+    @Inject
+    lateinit var employeeFragment : EmployeeFragment
 
     private fun setFragment(fragmentName: FragmentName?){
         if (fragmentName == null) return

@@ -7,8 +7,13 @@ import com.example.employeeapp.data.EmployeeRepository
 import com.example.employeeapp.data.LoadCallback
 import com.example.employeeapp.data.model.Employee
 import com.example.employeeapp.data.model.Specialty
+import javax.inject.Inject
 
 class MainViewModel : ViewModel() {
+    init{
+        App.getAppComponent().inject(this)
+    }
+
     private val fullEmployeeList = ArrayList<Employee>()
 
     private val currentFragmentLiveData = MutableLiveData<FragmentName>()
@@ -38,13 +43,12 @@ class MainViewModel : ViewModel() {
 
     private var currentSpecialty: Specialty? = null
     private var currentEmployee: Employee? = null
-    private var repository: EmployeeRepository? = null
 
-    fun loadData(repo: EmployeeRepository) {
-        if (repository == null) {
-            repository = repo
-        }
-        repository?.loadData(object : LoadCallback {
+    @Inject
+    lateinit var repository: EmployeeRepository
+
+    fun loadData() {
+        repository.loadData(object : LoadCallback {
             override fun startLoad() {
                 loadingLiveData.postValue(true)
             }
