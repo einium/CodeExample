@@ -12,12 +12,16 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.employeeapp.*
+import com.example.employeeapp.data.model.Employee
+import com.example.employeeapp.data.model.Specialty
 import com.example.employeeapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), NavigationListener {
-    lateinit var progressBar: ProgressBar
+    private lateinit var progressBar: ProgressBar
 
-    private lateinit var viewModel : MainViewModel
+    private lateinit var dataViewModel : DataViewModel
+    private lateinit var navViewModel : NavigationViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -25,8 +29,10 @@ class MainActivity : AppCompatActivity(), NavigationListener {
 
         progressBar = binding.progressBar
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.loadData()
+        dataViewModel = ViewModelProviders.of(this).get(DataViewModel::class.java)
+        dataViewModel.loadData()
+
+        navViewModel = ViewModelProviders.of(this).get(NavigationViewModel::class.java)
 
         setLoadingObserver()
         setErrorObserver()
@@ -34,16 +40,16 @@ class MainActivity : AppCompatActivity(), NavigationListener {
 
     override fun onResume() {
         super.onResume()
-        viewModel.addNavigationListener(this)
+        navViewModel.addNavigationListener(this)
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.removeNavigationListener()
+        navViewModel.removeNavigationListener()
     }
 
     private fun setLoadingObserver(){
-        viewModel.getLoadingLiveData()
+        dataViewModel.getLoadingLiveData()
             .observe(this, Observer {isLoading ->
                 if (isLoading) {
                     progressBar.visibility = View.VISIBLE
@@ -57,7 +63,7 @@ class MainActivity : AppCompatActivity(), NavigationListener {
             })
     }
     private fun setErrorObserver(){
-        viewModel.getErrorLiveData()
+        dataViewModel.getErrorLiveData()
             .observe(this, Observer {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
             })
@@ -72,7 +78,6 @@ class MainActivity : AppCompatActivity(), NavigationListener {
     override fun navigateToEmployee() {
         navController.navigate(R.id.action_employeeListFragment_to_employeeFragment)
     }
-
 }
 
 interface NavigationListener{

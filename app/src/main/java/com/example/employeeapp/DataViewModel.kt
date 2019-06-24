@@ -7,10 +7,9 @@ import com.example.employeeapp.data.EmployeeRepository
 import com.example.employeeapp.data.LoadCallback
 import com.example.employeeapp.data.model.Employee
 import com.example.employeeapp.data.model.Specialty
-import com.example.employeeapp.view.NavigationListener
 import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
+class DataViewModel : ViewModel() {
     init{
         App.getAppComponent().inject(this)
     }
@@ -32,13 +31,17 @@ class MainViewModel : ViewModel() {
         return specialtyListLiveData
     }
 
+    fun setNewSpecialty(specialty: Specialty) {
+        currentSpecialty = specialty
+        updateEmployeeBySpecialtyList()
+    }
+
     private val employeeBySpecialtyListLiveData = MutableLiveData<List<Employee>>()
     fun getEmployeeBySpecialtyListLiveData(): LiveData<List<Employee>> {
         return employeeBySpecialtyListLiveData
     }
 
     private var currentSpecialty: Specialty? = null
-    private var currentEmployee: Employee? = null
 
     @Inject
     lateinit var repository: EmployeeRepository
@@ -86,28 +89,11 @@ class MainViewModel : ViewModel() {
         specialtyListLiveData.postValue(specialtySet.toList())
     }
 
-    fun onSpecialtyItemClick(specialty: Specialty) {
-        currentSpecialty = specialty
-        updateEmployeeBySpecialtyList()
-        navigationListener?.navigateToEmployeeList()
-    }
-
-    fun onEmployeeItemClick(employee: Employee) {
+    private var currentEmployee: Employee? = null
+    fun setNewEmployee(employee: Employee) {
         currentEmployee = employee
-        navigationListener?.navigateToEmployee()
     }
-
     fun getCurrentEmployee(): Employee? {
         return currentEmployee
-    }
-
-    private var navigationListener: NavigationListener? = null
-
-    fun addNavigationListener(navListener: NavigationListener) {
-        navigationListener = navListener
-    }
-
-    fun removeNavigationListener() {
-        navigationListener = null
     }
 }

@@ -12,8 +12,9 @@ import com.example.employeeapp.adapters.SpecialtyListAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
-import com.example.employeeapp.MainViewModel
+import com.example.employeeapp.DataViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.example.employeeapp.NavigationViewModel
 import com.example.employeeapp.R
 import com.example.employeeapp.data.model.Specialty
 import com.example.employeeapp.adapters.OnSpecialtyClickCallback
@@ -22,12 +23,18 @@ import com.example.employeeapp.databinding.FragmentSpecialityListBinding
 class SpecialityListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var listAdapter: SpecialtyListAdapter
-    private var viewModel: MainViewModel? = null
+
+    private lateinit var dataViewModel: DataViewModel
+    private lateinit var navViewModel: NavigationViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = activity?.run {
-            ViewModelProviders.of(this).get(MainViewModel::class.java)
+        dataViewModel = activity?.run {
+            ViewModelProviders.of(this).get(DataViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
+
+        navViewModel = activity?.run {
+            ViewModelProviders.of(this).get(NavigationViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
     }
 
@@ -42,7 +49,8 @@ class SpecialityListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         listAdapter = SpecialtyListAdapter(object : OnSpecialtyClickCallback {
             override fun onClick(specialty: Specialty) {
-                viewModel?.onSpecialtyItemClick(specialty)
+                dataViewModel.setNewSpecialty(specialty)
+                navViewModel.onSpecialtyItemClick()
             }
         })
 
@@ -57,9 +65,9 @@ class SpecialityListFragment : Fragment() {
         )
         recyclerView.addItemDecoration(dividerItemDecoration)
 
-        val liveData = viewModel?.getSpecialtyListLiveData()
-        listAdapter.specialtyList = liveData?.value
-        liveData?.observe(this, Observer {
+        val liveData = dataViewModel.getSpecialtyListLiveData()
+        listAdapter.specialtyList = liveData.value
+        liveData.observe(this, Observer {
                 val oldList = listAdapter.specialtyList
                 val newList = it
                 val diffUtilCallback = SpecialtyDiffUtilCallback(oldList, newList)

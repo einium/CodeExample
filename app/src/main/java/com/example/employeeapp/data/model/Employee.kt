@@ -11,6 +11,7 @@ data class Employee(
     val avatr_url: String?,
     val specialty: List<Specialty>
 ) {
+
     private var year: Int = 0
     private var month: Int = 0
     private var day: Int = 0
@@ -62,9 +63,11 @@ data class Employee(
     fun getFirstName(): String {
         return f_name.beginWithUpperCase()
     }
+
     fun getLastName(): String {
         return l_name.beginWithUpperCase()
     }
+
     fun getFullName(): String {
         return "${getFirstName()} ${getLastName()}"
     }
@@ -78,13 +81,14 @@ data class Employee(
     }
 
     fun getSpecialtyId(): Int {
-        if (specialty.isNotEmpty()){
+        if (specialty.isNotEmpty()) {
             return specialty[0].specialty_id
         }
         return -1
     }
+
     fun getSpecialtyName(): String {
-        if (specialty.isNotEmpty()){
+        if (specialty.isNotEmpty()) {
             return specialty[0].name
         }
         return ""

@@ -13,27 +13,35 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.employeeapp.data.model.Employee
-import com.example.employeeapp.MainViewModel
+import com.example.employeeapp.DataViewModel
+import com.example.employeeapp.NavigationViewModel
 import com.example.employeeapp.R
 import com.example.employeeapp.adapters.EmployeeListAdapter
 import com.example.employeeapp.adapters.OnEmployeeClickCallback
+import com.example.employeeapp.data.model.Specialty
 import com.example.employeeapp.databinding.FragmentEmployeeListBinding
 
-class EmployeeListFragment: Fragment() {
+class EmployeeListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var listAdapter: EmployeeListAdapter
-    private lateinit var viewModel: MainViewModel
+
+    private lateinit var dataViewModel: DataViewModel
+    private lateinit var navViewModel: NavigationViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = activity?.run {
-            ViewModelProviders.of(this).get(MainViewModel::class.java)
+        dataViewModel = activity?.run {
+            ViewModelProviders.of(this).get(DataViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
+
+        navViewModel = activity?.run {
+            ViewModelProviders.of(this).get(NavigationViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: FragmentEmployeeListBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_employee_list, container,false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_employee_list, container, false)
 
         recyclerView = binding.employeeList
         return binding.root
@@ -41,9 +49,10 @@ class EmployeeListFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listAdapter = EmployeeListAdapter(object: OnEmployeeClickCallback {
+        listAdapter = EmployeeListAdapter(object : OnEmployeeClickCallback {
             override fun onClick(employee: Employee) {
-                viewModel.onEmployeeItemClick(employee)
+                dataViewModel.setNewEmployee(employee)
+                navViewModel.onEmployeeItemClick()
             }
         })
         val listLayoutManager = LinearLayoutManager(activity)
@@ -57,7 +66,7 @@ class EmployeeListFragment: Fragment() {
         )
         recyclerView.addItemDecoration(dividerItemDecoration)
 
-        val liveData = viewModel.getEmployeeBySpecialtyListLiveData()
+        val liveData = dataViewModel.getEmployeeBySpecialtyListLiveData()
         listAdapter.employeeList = liveData.value
         liveData.observe(this, Observer {
             val oldList = listAdapter.employeeList
@@ -69,6 +78,7 @@ class EmployeeListFragment: Fragment() {
         })
     }
 }
+
 class EmployeeDiffUtilCallback(private val oldList: List<Employee>?, private val newList: List<Employee>?) :
     DiffUtil.Callback() {
 

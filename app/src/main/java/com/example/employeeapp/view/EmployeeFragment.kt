@@ -17,7 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.example.employeeapp.data.model.Employee
-import com.example.employeeapp.MainViewModel
+import com.example.employeeapp.DataViewModel
 import com.example.employeeapp.R
 import com.example.employeeapp.databinding.FragmentEmployeeBinding
 
@@ -27,12 +27,12 @@ class EmployeeFragment : Fragment() {
     private lateinit var birthDay: TextView
     private lateinit var age: TextView
     private lateinit var specialty: TextView
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: DataViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = activity?.run {
-            ViewModelProviders.of(this).get(MainViewModel::class.java)
+            ViewModelProviders.of(this).get(DataViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
     }
 
@@ -64,7 +64,6 @@ class EmployeeFragment : Fragment() {
     }
 
     private fun setAvatar(url: String) {
-
         if (url != "") {
             Glide.with(context)
                 .load(url)
