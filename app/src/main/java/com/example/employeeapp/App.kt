@@ -14,18 +14,12 @@ class App : Application() {
         appComponent = DaggerAppComponent.builder()
             .contextModule(contextModule)
             .build()
-        viewComponent = DaggerViewComponent.builder()
-            .build()
     }
 
     companion object {
         private lateinit var appComponent : AppComponent
         fun getAppComponent() : AppComponent {
             return appComponent
-        }
-        private lateinit var viewComponent : ViewComponent
-        fun getViewComponent() : ViewComponent {
-            return viewComponent
         }
     }
 }

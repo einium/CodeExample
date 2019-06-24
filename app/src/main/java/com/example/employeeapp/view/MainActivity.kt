@@ -9,34 +9,37 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import com.example.employeeapp.*
 import com.example.employeeapp.databinding.ActivityMainBinding
-import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity(), NavigationListener {
     lateinit var progressBar: ProgressBar
 
     private lateinit var viewModel : MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        App.getViewComponent().inject(this)
+        navController = findNavController(R.id.nav_host_fragment)
 
         progressBar = binding.progressBar
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.loadData()
 
-        setFragmentChangeObserver()
         setLoadingObserver()
         setErrorObserver()
     }
 
-    private fun setFragmentChangeObserver(){
-        viewModel.getCurrentFragmentLiveData()
-            .observe(this, Observer {fragment -> setFragment(fragment)})
+    override fun onResume() {
+        super.onResume()
+        viewModel.addNavigationListener(this)
+    }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.removeNavigationListener()
     }
 
     private fun setLoadingObserver(){
@@ -60,24 +63,19 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    @Inject
-    lateinit var specialityListFragment : SpecialityListFragment
-    @Inject
-    lateinit var employeeListFragment : EmployeeListFragment
-    @Inject
-    lateinit var employeeFragment : EmployeeFragment
+    private lateinit var navController: NavController
 
-    private fun setFragment(fragmentName: FragmentName?){
-        if (fragmentName == null) return
-
-        val fragment = when (fragmentName) {
-            FragmentName.SpecialityListFragment -> specialityListFragment
-            FragmentName.EmployeeListFragment -> employeeListFragment
-            FragmentName.EmployeeFragment -> employeeFragment
-        }
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.addToBackStack(fragmentName.name)
-        transaction.replace(R.id.fragment_container, fragment)
-        transaction.commit()
+    override fun navigateToEmployeeList() {
+        navController.navigate(R.id.action_specialityListFragment_to_employeeListFragment)
     }
+
+    override fun navigateToEmployee() {
+        navController.navigate(R.id.action_employeeListFragment_to_employeeFragment)
+    }
+
+}
+
+interface NavigationListener{
+    fun navigateToEmployeeList()
+    fun navigateToEmployee()
 }

@@ -7,6 +7,7 @@ import com.example.employeeapp.data.EmployeeRepository
 import com.example.employeeapp.data.LoadCallback
 import com.example.employeeapp.data.model.Employee
 import com.example.employeeapp.data.model.Specialty
+import com.example.employeeapp.view.NavigationListener
 import javax.inject.Inject
 
 class MainViewModel : ViewModel() {
@@ -15,11 +16,6 @@ class MainViewModel : ViewModel() {
     }
 
     private val fullEmployeeList = ArrayList<Employee>()
-
-    private val currentFragmentLiveData = MutableLiveData<FragmentName>()
-    fun getCurrentFragmentLiveData(): LiveData<FragmentName> {
-        return currentFragmentLiveData
-    }
 
     private val loadingLiveData = MutableLiveData<Boolean>()
     fun getLoadingLiveData(): LiveData<Boolean> {
@@ -59,9 +55,6 @@ class MainViewModel : ViewModel() {
                 fullEmployeeList.clear()
                 fullEmployeeList.addAll(employeeList)
 
-                if (currentFragmentLiveData.value == null) {
-                    currentFragmentLiveData.postValue(FragmentName.SpecialityListFragment)
-                }
                 updateEmployeeBySpecialtyList()
                 updateSpecialtyList()
             }
@@ -95,20 +88,26 @@ class MainViewModel : ViewModel() {
 
     fun onSpecialtyItemClick(specialty: Specialty) {
         currentSpecialty = specialty
-        currentFragmentLiveData.postValue(FragmentName.EmployeeListFragment)
         updateEmployeeBySpecialtyList()
+        navigationListener?.navigateToEmployeeList()
     }
 
     fun onEmployeeItemClick(employee: Employee) {
         currentEmployee = employee
-        currentFragmentLiveData.postValue(FragmentName.EmployeeFragment)
+        navigationListener?.navigateToEmployee()
     }
 
     fun getCurrentEmployee(): Employee? {
         return currentEmployee
     }
-}
 
-enum class FragmentName {
-    SpecialityListFragment, EmployeeListFragment, EmployeeFragment
+    private var navigationListener: NavigationListener? = null
+
+    fun addNavigationListener(navListener: NavigationListener) {
+        navigationListener = navListener
+    }
+
+    fun removeNavigationListener() {
+        navigationListener = null
+    }
 }

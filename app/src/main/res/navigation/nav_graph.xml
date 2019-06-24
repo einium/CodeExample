@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/nav_graf" app:startDestination="@id/specialityListFragment">
+
+    <fragment android:id="@+id/specialityListFragment"
+              android:name="com.example.employeeapp.view.SpecialityListFragment"
+              android:label="SpecialityListFragment">
+        <action android:id="@+id/action_specialityListFragment_to_employeeListFragment"
+                app:destination="@id/employeeListFragment"/>
+    </fragment>
+    <fragment android:id="@+id/employeeListFragment"
+              android:name="com.example.employeeapp.view.EmployeeListFragment"
+              android:label="EmployeeListFragment">
+        <action android:id="@+id/action_employeeListFragment_to_employeeFragment"
+                app:destination="@id/employeeFragment"/>
+    </fragment>
+    <fragment android:id="@+id/employeeFragment"
+              android:name="com.example.employeeapp.view.EmployeeFragment"
+              android:label="EmployeeFragment"/>
+</navigation>
