@@ -1,7 +1,5 @@
 package com.example.employeeapp.dagger
 
-import android.content.Context
-import com.example.employeeapp.data.DataBaseHelper
 import com.example.employeeapp.data.EmployeeRepository
 import com.example.employeeapp.data.Repository
 import dagger.Module
@@ -29,10 +27,5 @@ class RepositoryModule {
             .baseUrl("http://gitlab.65apps.com/")
             .build()
     }
-
-    @Provides
-    @Singleton
-    fun provideDataBaseHelper(context: Context): DataBaseHelper {
-        return DataBaseHelper(context)
-    }
 }
+

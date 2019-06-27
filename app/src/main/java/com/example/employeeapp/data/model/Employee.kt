@@ -11,7 +11,6 @@ data class Employee(
     val avatr_url: String?,
     val specialty: List<Specialty>
 ) {
-
     private var year: Int = 0
     private var month: Int = 0
     private var day: Int = 0

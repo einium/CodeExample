@@ -1,9 +1,13 @@
 package com.example.employeeapp.data
 
 import com.example.employeeapp.App
+import com.example.employeeapp.data.database.EmployeeDao
+import com.example.employeeapp.data.database.EmployeeEntity
 import com.example.employeeapp.data.model.Employee
 import com.example.employeeapp.data.model.EmployeeList
+import com.example.employeeapp.data.model.Specialty
 import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.internal.schedulers.IoScheduler
 import io.reactivex.schedulers.Schedulers
@@ -17,13 +21,13 @@ class EmployeeRepository @Inject constructor() : Repository {
     }
 
     @Inject
-    lateinit var dbHelper: DataBaseHelper
+    lateinit var employeeDao: EmployeeDao
 
     @Inject
     lateinit var retrofit: Retrofit
 
     override fun loadData(callback: LoadCallback) {
-        //loadFromDB(callback)
+        loadFromDB(callback)
         loadFromServer(callback)
     }
 
@@ -44,22 +48,52 @@ class EmployeeRepository @Inject constructor() : Repository {
     private fun loadFromDB(callback: LoadCallback) {
         callback.startLoad()
         Observable.fromCallable {
-            dbHelper.loadEmployees()
+            employeeDao.getAll()
         }.observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.computation())
             .subscribe({
-                callback.onEmployeesLoaded(it)
+                val employeeList = convertToEmployee(it)
+                callback.onEmployeesLoaded(employeeList)
             },
                 {
                     callback.onError(it.message!!)
                 })
     }
 
+    private fun convertToEmployee(dbList: List<EmployeeEntity>): List<Employee> {
+        val resultList = ArrayList<Employee>()
+        for (entity in dbList){
+            resultList.add(
+                Employee(entity.fName,
+                entity.lName,
+                    entity.birthday,
+                    entity.avatarUrl,
+                    listOf(Specialty(entity.specialtyId, entity.specialtyName))))
+        }
+        return resultList
+    }
+
     private fun saveToDB(list: List<Employee>) {
+        val entityList = convertToEntity(list)
         Observable.fromCallable {
-            dbHelper.saveEmployeeList(list)
+            employeeDao.insertAll(entityList)
         }.subscribeOn(Schedulers.computation())
             .subscribe()
+    }
+
+    private fun convertToEntity(list: List<Employee>): List<EmployeeEntity> {
+        val resultList = ArrayList<EmployeeEntity>()
+        for (employee in list){
+            val entity = EmployeeEntity()
+            entity.fName = employee.f_name
+            entity.lName = employee.l_name
+            entity.birthday = employee.birthday ?: ""
+            entity.avatarUrl = employee.getAvatarUrl()
+            entity.specialtyId = employee.getSpecialtyId()
+            entity.specialtyName = employee.getSpecialtyName()
+            resultList.add(entity)
+        }
+        return resultList
     }
 }
 

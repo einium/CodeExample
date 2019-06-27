@@ -1,9 +1,13 @@
 package com.example.employeeapp
 
 import android.app.Application
+import androidx.room.Room
 import com.example.employeeapp.dagger.*
+import com.example.employeeapp.data.database.AppDatabase
+import com.example.employeeapp.data.database.EmployeeDao
 
 class App : Application() {
+    private lateinit var dao: EmployeeDao
     override fun onCreate() {
         super.onCreate()
         buildComponents()

@@ -11,9 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.room.Room
 import com.example.employeeapp.*
-import com.example.employeeapp.data.model.Employee
-import com.example.employeeapp.data.model.Specialty
 import com.example.employeeapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), NavigationListener {
