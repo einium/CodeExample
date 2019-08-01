@@ -7,7 +7,6 @@ import com.example.employeeapp.data.model.Employee
 import com.example.employeeapp.data.model.EmployeeList
 import com.example.employeeapp.data.model.Specialty
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.internal.schedulers.IoScheduler
 import io.reactivex.schedulers.Schedulers

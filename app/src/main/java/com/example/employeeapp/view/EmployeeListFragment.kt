@@ -18,7 +18,6 @@ import com.example.employeeapp.NavigationViewModel
 import com.example.employeeapp.R
 import com.example.employeeapp.adapters.EmployeeListAdapter
 import com.example.employeeapp.adapters.OnEmployeeClickCallback
-import com.example.employeeapp.data.model.Specialty
 import com.example.employeeapp.databinding.FragmentEmployeeListBinding
 
 class EmployeeListFragment : Fragment() {

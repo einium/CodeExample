@@ -1,8 +1,6 @@
 package com.example.employeeapp
 
 import androidx.lifecycle.ViewModel
-import com.example.employeeapp.data.model.Employee
-import com.example.employeeapp.data.model.Specialty
 import com.example.employeeapp.view.NavigationListener
 
 class NavigationViewModel  : ViewModel() {

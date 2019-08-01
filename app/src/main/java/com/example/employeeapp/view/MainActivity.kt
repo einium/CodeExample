@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.room.Room
 import com.example.employeeapp.*
 import com.example.employeeapp.databinding.ActivityMainBinding
 
